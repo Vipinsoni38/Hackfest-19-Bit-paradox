@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.goldenboat.waymart.DataTypes.ProductDetails;
 import com.goldenboat.waymart.R;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
 
     @Override public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
 
+        holder.price.setText("\u20B9" + String.valueOf(data.get(position).getPrice()));
 
     }
 

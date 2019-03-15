@@ -20,6 +20,4 @@ public class ProductDetails {
     public int getPrice() {
         return price;
     }
-
-
 }

@@ -49,7 +49,7 @@
             android:layout_marginTop="2sp"
             android:layout_below="@+id/object_title"
             android:textStyle="bold"
-            android:text="$ 2"
+            android:text=" \u20B9 2"
             android:textSize="14sp"
             android:id="@+id/price"
             />
