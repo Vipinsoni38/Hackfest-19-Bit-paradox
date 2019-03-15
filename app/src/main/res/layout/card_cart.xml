@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3sp"
+        >
+        <ImageView
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:id="@+id/item_image"
+            android:layout_margin="2sp"
+            android:src="@color/colorLoginBackground"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="3sp"
+            android:text="1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:id="@+id/quantity"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/item_image"
+            android:layout_toLeftOf="@+id/quantity"
+            android:layout_marginStart="3sp"
+            android:layout_marginBottom="3sp"
+            android:layout_marginTop="8sp"
+            android:text="Object"
+            android:textSize="18sp"
+            android:id="@+id/object_title"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/item_image"
+            android:layout_toLeftOf="@+id/quantity"
+            android:layout_marginStart="3sp"
+            android:layout_marginBottom="3sp"
+            android:layout_marginTop="2sp"
+            android:layout_below="@+id/object_title"
+            android:textStyle="bold"
+            android:text="$ 2"
+            android:textSize="14sp"
+            android:id="@+id/price"
+            />
+    </RelativeLayout>
+</RelativeLayout>
