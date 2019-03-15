@@ -1,12 +1,16 @@
 package com.goldenboat.waymart.Login;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
+import com.goldenboat.waymart.MainActivity;
 import com.goldenboat.waymart.R;
 import com.goldenboat.waymart.SharedPrefrence.PrefrenceHelper;
 import com.google.android.gms.auth.api.Auth;
@@ -74,17 +78,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //builder.setCancelable(false);
         //final AlertDialog dialog = builder.create();
         //dialog.show();
+        android.app.AlertDialog.Builder buildd = new android.app.AlertDialog.Builder(LoginActivity.this);
+        View v = LayoutInflater.from(LoginActivity.this).inflate(R.layout.dialog_loading,null);
+        buildd.setView(v);
+        buildd.setMessage("Logging in..");
+        buildd.setCancelable(false);
+        final AlertDialog fgi = buildd.create();
+        fgi.show();
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-
+                    fgi.dismiss();
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         prefrenceHelper.setIsLogin(true);
                         prefrenceHelper.setUID(task.getResult().getUser().getUid());
                         prefrenceHelper.setEmail(task.getResult().getUser().getEmail());
+
                         finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "Sign In Failed",
