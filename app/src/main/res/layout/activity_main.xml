@@ -9,21 +9,53 @@
 
     >
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_cart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="56dp"
         />
 
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <RelativeLayout
+        android:id="@+id/relative_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_nav"
-        android:background="?android:attr/windowBackground"
-        />
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total : ₹"
+            android:layout_marginStart="10sp"
+            android:textSize="30sp"
+            android:textColor="@color/colorAccent"
+            android:layout_centerVertical="true"
+            android:id="@+id/totaltext"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="30sp"
+            android:layout_marginStart="3sp"
+            android:layout_toRightOf="@+id/totaltext"
+            android:textColor="@color/colorAccent"
+            android:layout_centerVertical="true"
+
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="    Checkout    "
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5sp"
+            android:background="@drawable/ultraround_background_blue"
+            />
+
+    </RelativeLayout>
 
 </RelativeLayout>

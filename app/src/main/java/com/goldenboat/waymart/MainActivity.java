@@ -1,55 +1,79 @@
 package com.goldenboat.waymart;
 
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.app.AlertDialog.Builder;
 import android.app.AlertDialog;
-import com.goldenboat.waymart.Fragments.Cart;
+import com.goldenboat.waymart.DataTypes.ProductDetails;
+import com.goldenboat.waymart.Adapters.CartRecyclerAdapter;
 import com.goldenboat.waymart.Login.LoginActivity;
 import com.goldenboat.waymart.OrderHistory.OrderHistory;
 import com.goldenboat.waymart.SharedPrefrence.PrefrenceHelper;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements
-        BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     PrefrenceHelper prefrenceHelper;
     Fragment fragment;
     BottomNavigationView bottomNavigationView;
     FirebaseAuth mauth;
+    RelativeLayout relative_layout;
+
+    RecyclerView recyclerView;
+    ArrayList<ProductDetails> data;
+    CartRecyclerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mauth = FirebaseAuth.getInstance();
         prefrenceHelper = new PrefrenceHelper(this);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        relative_layout = findViewById(R.id.relative_layout);
+        //relative_layout.setVisibility(View.GONE);
+
 
         if (!prefrenceHelper.isLogin()) {
             Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
         }
+
+        recyclerView = findViewById(R.id.recycler_cart);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CartRecyclerAdapter(this);
+        recyclerView.setAdapter(adapter);
+        data = new ArrayList<>();
+
+        data.add(new ProductDetails());
+        data.add(new ProductDetails());
+        data.add(new ProductDetails());
+        data.add(new ProductDetails());
+        data.add(new ProductDetails());
+        data.add(new ProductDetails());
+        data.add(new ProductDetails());
+        data.add(new ProductDetails());
+        data.add(new ProductDetails());
+        adapter.givedata(data);
+
+
+
+
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home_menu, menu);
         super.onCreateOptionsMenu(menu);
         return true;
@@ -71,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onClick(DialogInterface dialog, int which) {
                         prefrenceHelper.setIsLogin(false);
                         mauth.signOut();
-
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     }
                 }).setNegativeButton("NO", null);
                 AlertDialog d = logoutDialog.create();
@@ -86,20 +110,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home:
-                fragment = new Cart();
-                break;
-            default:
-                fragment = new Cart();
-
-        }
-        getSupportFragmentManager().beginTransaction().
-            replace(R.id.fragment_container, fragment)
-            .commit();
-        return false;
-    }
     @Override
     public void onBackPressed() {
         Builder buildd = new Builder(MainActivity.this);
