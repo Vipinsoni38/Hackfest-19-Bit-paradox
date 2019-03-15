@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "55292560883",
+    "firebase_url": "https://waymart-1f02b.firebaseio.com",
+    "project_id": "waymart-1f02b",
+    "storage_bucket": "waymart-1f02b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55292560883:android:e5cd507c2e42abcc",
+        "android_client_info": {
+          "package_name": "com.goldenboat.waymart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55292560883-j8sqgospbss07mjiv3s8n6dfkqobt2op.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.goldenboat.waymart",
+            "certificate_hash": "e4ae061598a5983dbc498a80d8491f8ce51a3ae2"
+          }
+        },
+        {
+          "client_id": "55292560883-e8kaikds7dukrqe2kf35qf8cgdb1et5p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-nADYPhm7NRmgAW49oqdOWRyrvlLRVrA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55292560883-e8kaikds7dukrqe2kf35qf8cgdb1et5p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
