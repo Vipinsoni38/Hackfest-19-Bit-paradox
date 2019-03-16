@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/prev_orders" android:title="Prev Orders" />
+    <item android:id="@+id/prev_orders" android:title="Server" />
     <item android:id="@+id/logout" android:title="Log Out" />
 </menu>

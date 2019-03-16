@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.goldenboat.waymart.DataTypes.ProductDetails;
 import com.goldenboat.waymart.Adapters.CartRecyclerAdapter;
 import com.goldenboat.waymart.Login.LoginActivity;
-import com.goldenboat.waymart.OrderHistory.OrderHistory;
+import com.goldenboat.waymart.Server.Server;
 import com.goldenboat.waymart.SharedPrefrence.PrefrenceHelper;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +35,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -187,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void startTheSession(String s) {
+    private void startTheSession(final String s) {
 
         DatabaseReference ref = database.getReference("carts").child(s);
         relative_layout.setVisibility(View.VISIBLE);
@@ -199,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 if (list != null)
                 list.clear();
                 list = dataSnapshot.getValue(t);
-                goForIt();
+                goForIt(s);
                 fgi.dismiss();
             }
 
@@ -211,39 +210,60 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void goForIt( ) {
+    private void goForIt(final String s) {
 
         if (!isFetched){
             new Handler().postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
-                    goForIt();
+                    goForIt(s);
                 }
             }, 1000);
         } else {
             data.clear();
-            int i,j,k;
+            int i,j=0,k;
             if (list == null || list.size()==0)return;
+
+            boolean isSame=false;
+            for (i=0; i<list.size(); i++) {
+                for (j=0; j<list.size(); j++) {
+                    if (i==j)continue;
+                    if (list.get(i).equals(list.get(j))){
+                        isSame = true;
+                        break;
+                    }
+                }
+                if (isSame) break;
+            }
+            if (isSame) {
+                list.remove(i);
+                list.remove(j - 1);
+                DatabaseReference ref = database.getReference("carts").child(s);
+                ref.setValue(list);
+            }
+
+            Log.e("TAG", String.valueOf(list.size()));
+
             for (i=0; i<list.size(); i++) {
                 for (j = 0; j<allData.size(); j++) {
-                    if (allData.get(j).getId().equals(list.get(i))) {
+                    if (allData.get(j).getId().substring(4,12).equals(list.get(i).substring(4,12))) {
 
-                        //for (k = 0; k<data.size(); k++) {
-                        //    if (data.get(k).getId().equals(allData.get(j).getId())) {
-                        //        data.get(k).countplus(); break;
-                        //    }
-                        //}
-                        //if (k == data.size()) {
-                        //    data.add(allData.get(j));
-                        //}
-                        //break;
+
+                        Log.e("TAAg",String.valueOf(data.size())+":"+String.valueOf(list.size()));
+
                         for (k=0;k<data.size();k++) {
-                            if (data.get(k).getId().equals(list.get(i))) {
+                            Log.e("TAG",data.get(k).getId().substring(4,12)+":"+list.get(i).substring(4,12));
+                            if (data.get(k).getId().substring(4,12).equals(list.get(i).substring(4,12))) {
                                 data.get(k).countplus();
+                                Log.e("TAG",String.valueOf(data.get(k).getCount())+" Added 1");
+
                                 break;
                             }
                         }
+                        if (data.size()>0)
+                        Log.e("3rd", String.valueOf(data.get(data.size()-1).getCount()));
+
                         if (k==data.size()) {
                             ProductDetails productDetails = new ProductDetails();
                             productDetails.setCount(allData.get(j).getCount());
@@ -281,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
             case R.id.prev_orders:
-                Intent intent = new Intent(MainActivity.this, OrderHistory.class);
+                Intent intent = new Intent(MainActivity.this, Server.class);
                 startActivity(intent);
                 break;
             case R.id.logout:
