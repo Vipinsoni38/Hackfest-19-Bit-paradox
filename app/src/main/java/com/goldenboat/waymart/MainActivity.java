@@ -3,6 +3,7 @@ package com.goldenboat.waymart;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int QR_CODE_INT = 100;
     PrefrenceHelper prefrenceHelper;
     Fragment fragment;
     BottomNavigationView bottomNavigationView;
@@ -88,17 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         start_session.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                session=1;
-                start_session.setVisibility(View.GONE);
-                android.app.AlertDialog.Builder buildd = new android.app.AlertDialog.Builder(MainActivity.this);
-                View vv = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_loading,null);
-                buildd.setView(vv);
-                buildd.setMessage("Loading Your Cart...");
-                buildd.setCancelable(false);
-                fgi = buildd.create();
-                fgi.show();
-                myCart = "CART0002";
-                startTheSession(myCart);
+                Intent i = new Intent(getApplicationContext(), QRCodeScan.class);
+                startActivityForResult(i, QR_CODE_INT);
             }
         });
 
@@ -154,6 +147,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void startSession(String s){
+        session=1;
+        start_session.setVisibility(View.GONE);
+        android.app.AlertDialog.Builder buildd = new android.app.AlertDialog.Builder(MainActivity.this);
+        View vv = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_loading,null);
+        buildd.setView(vv);
+        buildd.setMessage("Loading Your Cart...");
+        buildd.setCancelable(false);
+        fgi = buildd.create();
+        fgi.show();
+        myCart = s;
+        startTheSession(myCart);
     }
 
     private void fetchAllData() {
@@ -320,12 +327,14 @@ public class MainActivity extends AppCompatActivity {
             fgi.show();
         } else {
             Builder buildd = new Builder(MainActivity.this);
-
             buildd.setMessage("Do You Want To Exit this Cart");
             buildd.setCancelable(true);
             buildd.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
+                    total_amount.setText("0");
+                    totalitem.setText("0 items in Cart");
                     session=0;
                     start_session.setVisibility(View.VISIBLE);
                     data.clear();
@@ -336,5 +345,25 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog fgi = buildd.create();
             fgi.show();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode==RESULT_OK && requestCode==QR_CODE_INT) {
+            String s = data.getStringExtra("QR_Result");
+            if (s.length()<8) {
+                Toast.makeText(getApplicationContext(),"Not a Valid Cart",Toast.LENGTH_SHORT)
+                    .show();
+                return;
+            }
+            if (s.substring(0,4).equals("CART")) {
+                startSession(s);
+            } else {
+                Toast.makeText(getApplicationContext(),"Not a Valid Cart",Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
