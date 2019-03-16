@@ -8,7 +8,14 @@
     tools:context=".MainActivity"
 
     >
-
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="      Start Session      "
+    android:layout_centerInParent="true"
+    android:id="@+id/start_session"
+    android:background="@drawable/ultraround_background_blue"
+    />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_cart"
         android:layout_width="match_parent"
@@ -28,22 +35,32 @@
             android:layout_height="wrap_content"
             android:text="Total : ₹"
             android:layout_marginStart="10sp"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textColor="@color/colorAccent"
-            android:layout_centerVertical="true"
             android:id="@+id/totaltext"
+            android:layout_marginTop="7sp"
             />
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 items in Cart"
+            android:layout_marginStart="10sp"
+            android:textSize="15sp"
+            android:layout_alignParentBottom="true"
+            android:textColor="#E7490C"
+            android:textStyle="bold"
+            android:id="@+id/totalitem"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:layout_marginStart="3sp"
             android:layout_toRightOf="@+id/totaltext"
             android:textColor="@color/colorAccent"
-            android:layout_centerVertical="true"
-
+            android:id="@+id/total_amount"
+            android:layout_marginTop="7sp"
             />
 
         <Button
@@ -52,8 +69,9 @@
             android:text="    Checkout    "
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_margin="5sp"
+            android:layout_marginRight="15sp"
             android:background="@drawable/ultraround_background_blue"
+            android:id="@+id/checkout"
             />
 
     </RelativeLayout>

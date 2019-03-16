@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.goldenboat.waymart.DataTypes.ProductDetails;
 import com.goldenboat.waymart.R;
 import java.util.ArrayList;
@@ -16,9 +17,16 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
 
     ArrayList<ProductDetails> data;
     Context mctx;
-
+    int[] draw;
     public CartRecyclerAdapter(Context mctx) {
         this.mctx = mctx;
+        draw=new int[6];
+        draw[0]=R.drawable.bournvita;
+        draw[1]=R.drawable.charger;
+        draw[2]=R.drawable.pen;
+        draw[3]=R.drawable.silk;
+        draw[4]=R.drawable.sunglasses;
+        draw[5]=R.drawable.toothpaste;
     }
 
     @NonNull @Override
@@ -38,8 +46,16 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
     }
 
     @Override public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
-
+        holder.count.setText(String.valueOf(data.get(position).getCount()));
         holder.price.setText("\u20B9" + String.valueOf(data.get(position).getPrice()));
+        holder.title.setText(data.get(position).getProduct_title());
+
+        if (data.get(position).getPic_url()==null || data.get(position).getPic_url().equals("")||
+                data.get(position).getPic_url().equals("null") ) {
+            Glide.with(mctx).load(draw[position*2%5]).into(holder.cardImage);
+        } else {
+            Glide.with(mctx).load(data.get(position).getPic_url()).into(holder.cardImage);
+        }
 
     }
 

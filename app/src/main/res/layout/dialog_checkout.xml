@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Checkout"
+        android:id="@+id/checkout_text"
+        android:textColor="#000"
+        android:textSize="30sp"
+        android:layout_margin="10sp"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/checkout_recycler"
+        android:layout_below="@+id/checkout_text"
+        android:layout_marginBottom="60sp"
+        android:layout_marginLeft="2sp"
+        android:layout_marginRight="2sp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:id="@+id/cool"
+        android:layout_alignBottom="@+id/checkout_recycler"
+        />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/relative_layout_successful"
+        >
+        <ImageView
+            android:layout_width="200sp"
+            android:layout_height="200sp"
+            android:src="@drawable/ic_done_all_black_24dp"
+            android:id="@+id/tick_image"
+            android:tint="#40BD44"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Successful"
+            android:layout_below="@+id/tick_image"
+            android:textColor="#40BD44"
+            android:textSize="30sp"
+            />
+
+    </RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="       Proceed to Pay : 0        "
+        android:background="@drawable/ultraround_background_green"
+        android:textColor="#fff"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/cool"
+        android:layout_margin="3sp"
+        android:id="@+id/proceed_pay"
+
+        />
+</RelativeLayout>
