@@ -35,6 +35,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -172,9 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 GenericTypeIndicator<ArrayList<ProductDetails>> t =
                         new GenericTypeIndicator<ArrayList<ProductDetails>>() {};
                 allData = dataSnapshot.getValue(t);
-                for (int i=0;i<allData.size();i++){
-                    Log.e("f",allData.get(i).getId());
-                }
+
                 isFetched = true;
             }
 
@@ -194,11 +198,70 @@ public class MainActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
+
+
+
+                JSONObject object=new JSONObject();
+                int f=0;
+                Map<String,String> a=new HashMap<>();
+                Log.e("TAG", "Going in");
+
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Log.e("TAG", "Came in");
+
+                    String s = snapshot.toString().trim();
+                    s=s.substring(s.length()-1-14,s.length()-2);
+                    Log.e("TAG", s);
+                    try {
+
+                        object.put(String.valueOf(f),s.trim());
+                        f++;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+                //GenericTypeIndicator<HashMap<String,String>> t=new GenericTypeIndicator<HashMap<String,String>>(){};
+                //HashMap<String,String> sss=dataSnapshot.getValue(t);
+                //if (sss==null) {
+                //    try {
+                //        list.clear();
+                //        goForIt(s);
+                //    } catch (JSONException e) {
+                //        e.printStackTrace();
+                //    }
+                //    return;
+                //}
+                //Iterator iterator = sss.entrySet().iterator();
+                //while (iterator.hasNext())
+                //{
+                //    Map.Entry mapEntry = (Map.Entry) iterator.next();
+                //    //System.out.println("The key is: " + mapEntry.getKey() + ",value is :" + mapEntry.getValue());
+                //    try {
+                //        object.put(String.valueOf(f),mapEntry.getValue());
+                //        f++;
+                //    } catch (JSONException e) {
+                //        e.printStackTrace();
+                //    }
+                //}
+                //
+                //for (DataSnapshot d:dataSnapshot.getChildren()) {
+                //    GenericTypeIndicator<HashMap<String,String>> t=new GenericTypeIndicator<HashMap<String,String>>(){};
+                //    HashMap<String,String> s=dataSnapshot.getValue(t);
+                //    s.
+                //}
+                Log.e("MyData",object.toString());
                 if (list != null)
                 list.clear();
-                list = dataSnapshot.getValue(t);
-                goForIt(s);
+                list = getList(object);
+                try {
+                    goForIt(s);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 fgi.dismiss();
             }
 
@@ -210,17 +273,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void goForIt(final String s) {
+    private ArrayList<String> getList(JSONObject value) {
+        ArrayList<String> arrayList=new ArrayList<>();
+        if (value==null) return arrayList;
+        Iterator<String> iter = value.keys();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            try {
+                arrayList.add(value.getString(key));
+            } catch (JSONException e) {
 
-        if (!isFetched){
+            }
+        }
+        return arrayList;
+    }
+
+    private void goForIt(final String s) throws JSONException {
+
+        Toast.makeText(getApplicationContext(),"Reached it",Toast.LENGTH_SHORT).show();
+        if (!isFetched)
+        {
             new Handler().postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
-                    goForIt(s);
+                    try {
+                        goForIt(s);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }, 1000);
-        } else {
+        }
+        else
+            {
             data.clear();
             int i,j=0,k;
             if (list == null || list.size()==0)return;
@@ -240,21 +326,30 @@ public class MainActivity extends AppCompatActivity {
                 list.remove(i);
                 list.remove(j - 1);
                 DatabaseReference ref = database.getReference("carts").child(s);
-                ref.setValue(list);
+                JSONObject object = getListtoJson(list);
+                HashMap<String,String> sss=getHashMap(list);
+
+                ref.setValue(sss);
             }
 
             Log.e("TAG", String.valueOf(list.size()));
+            for (i=0;i<list.size();i++)
+            Toast.makeText(getApplicationContext(),list.get(i),Toast.LENGTH_SHORT).show();
 
-            for (i=0; i<list.size(); i++) {
+            int ii;
+                Log.e("final data", String.valueOf(data.size()));
+
+                for (ii=0; ii<list.size(); ii++) {
+                Log.e("TEEEG", String.valueOf(allData.size()));
                 for (j = 0; j<allData.size(); j++) {
-                    if (allData.get(j).getId().substring(4,12).equals(list.get(i).substring(4,12))) {
+                    if (allData.get(j).getId().substring(4,12).equals(list.get(ii).substring(4,12))) {
 
 
                         Log.e("TAAg",String.valueOf(data.size())+":"+String.valueOf(list.size()));
 
                         for (k=0;k<data.size();k++) {
-                            Log.e("TAG",data.get(k).getId().substring(4,12)+":"+list.get(i).substring(4,12));
-                            if (data.get(k).getId().substring(4,12).equals(list.get(i).substring(4,12))) {
+                            Log.e("TAG",data.get(k).getId().substring(4,12)+":"+list.get(ii).substring(4,12));
+                            if (data.get(k).getId().substring(4,12).equals(list.get(ii).substring(4,12))) {
                                 data.get(k).countplus();
                                 Log.e("TAG",String.valueOf(data.get(k).getCount())+" Added 1");
 
@@ -276,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-
+            Log.e("final data", String.valueOf(data.size()));
             adapter.givedata(data);
             int price=0,c=0;
             for (i=0;i<data.size();i++) {
@@ -288,6 +383,22 @@ public class MainActivity extends AppCompatActivity {
             amount=price;
         }
 
+    }
+
+    private HashMap<String, String> getHashMap(ArrayList<String> list) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        for (int l=0;l<list.size();l++) {
+            hashMap.put(String.valueOf(l),list.get(l));
+        }
+        return hashMap;
+    }
+
+    private JSONObject getListtoJson(ArrayList<String> list) throws JSONException {
+        JSONObject object = new JSONObject();
+        for (int h=0;h<list.size();h++){
+            object.put(String.valueOf(h),list.get(h));
+        }
+        return object;
     }
 
     @Override
